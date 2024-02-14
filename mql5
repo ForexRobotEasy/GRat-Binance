@@ -1,0 +1,149 @@
+
+// Developer: Forex Robot Easy Team
+// Developer's site: forexroboteasy.com
+
+// Include necessary libraries
+#include <Trade\Trade.mqh>
+#include <Trade\SymbolInfo.mqh>
+#include <Trade\OrderInfo.mqh>
+#include <Trade\PositionInfo.mqh>
+#include <Trade\TradeMacro.mqh>
+#include <Trading\ChartEvent.mqh>
+#include <Trading\TradeHistory.mqh>
+#include <Trading\TradePosition.mqh>
+
+// Define constants
+#define STOP_LOSS_PERCENT 0.02
+#define TAKE_PROFIT_PERCENT 0.05
+
+// Declare global variables
+CTrade trade;
+CSymbolInfo symbol;
+
+// Function to retrieve instrument data from Binance
+void GetInstrumentData(string symbolName)
+{
+    symbol.Name(symbolName);
+    double ask = symbol.Ask();
+    double bid = symbol.Bid();
+    double spread = symbol.Spread();
+    
+    Print('Symbol: ', symbolName);
+    Print('Ask: ', ask);
+    Print('Bid: ', bid);
+    Print('Spread: ', spread);
+}
+
+// Function to execute a market order for instant execution
+void ExecuteMarketOrder(string symbolName, ENUM_ORDER_TYPE orderType, double volume)
+{
+    trade.Buy(symbolName, volume, 0, 0, NULL, NULL);
+}
+
+// Function to modify an open position
+void ModifyPosition(ulong positionTicket, double stopLoss, double takeProfit)
+{
+    CPositionInfo position;
+    if(position.SelectByTicket(positionTicket))
+    {
+        position.Modify(stopLoss, takeProfit);
+    }
+}
+
+// Function to partially close an open position
+void PartialClosePosition(ulong positionTicket, double volume)
+{
+    CPositionInfo position;
+    if(position.SelectByTicket(positionTicket))
+    {
+        position.PartialClose(volume);
+    }
+}
+
+// Function to set trailing stops and trailing profits
+void SetTrailingStopsAndProfits(ulong positionTicket, double trailingStop, double trailingProfit)
+{
+    CPositionInfo position;
+    if(position.SelectByTicket(positionTicket))
+    {
+        position.SetTrailingStop(trailingStop);
+        position.SetTrailingProfit(trailingProfit);
+    }
+}
+
+// Function to execute predefined trading strategies automatically
+void ExecuteTradingStrategy(string strategyName)
+{
+    // Implement trading strategy logic here
+}
+
+// Function to place a limit order
+void PlaceLimitOrder(string symbolName, ENUM_ORDER_TYPE orderType, double price, double volume)
+{
+    trade.BuyLimit(symbolName, price, volume, 0, 0, NULL, NULL);
+}
+
+// Function to place a stop order
+void PlaceStopOrder(string symbolName, ENUM_ORDER_TYPE orderType, double price, double volume)
+{
+    trade.BuyStop(symbolName, price, volume, 0, 0, NULL, NULL);
+}
+
+// Function to customize order parameters
+void CustomizeOrderParameters(ulong orderTicket, double price, double volume)
+{
+    COrderInfo order;
+    if(order.SelectByTicket(orderTicket))
+    {
+        order.Modify(price, volume);
+    }
+}
+
+// Function to integrate with Binance API
+void IntegrateWithBinanceAPI()
+{
+    // Implement Binance API integration logic here
+}
+
+// Function to design user-friendly interface
+void DesignUserInterface()
+{
+    // Implement user interface design logic here
+}
+
+// Main function
+void OnStart()
+{
+    // Retrieve instrument data from Binance
+    GetInstrumentData('BTCUSDT');
+    
+    // Execute a market order for instant execution
+    ExecuteMarketOrder('BTCUSDT', ORDER_TYPE_BUY, 0.1);
+    
+    // Modify an open position
+    ModifyPosition(123456, 50000, 70000);
+    
+    // Partially close an open position
+    PartialClosePosition(123456, 0.05);
+    
+    // Set trailing stops and trailing profits
+    SetTrailingStopsAndProfits(123456, 1000, 5000);
+    
+    // Execute predefined trading strategies automatically
+    ExecuteTradingStrategy('TrendFollowing');
+    
+    // Place a limit order
+    PlaceLimitOrder('BTCUSDT', ORDER_TYPE_BUY, 50000, 0.1);
+    
+    // Place a stop order
+    PlaceStopOrder('BTCUSDT', ORDER_TYPE_SELL, 45000, 0.1);
+    
+    // Customize order parameters
+    CustomizeOrderParameters(123456, 55000, 0.2);
+    
+    // Integrate with Binance API
+    IntegrateWithBinanceAPI();
+    
+    // Design user-friendly interface
+    DesignUserInterface();
+}
